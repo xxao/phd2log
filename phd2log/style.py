@@ -1,0 +1,85 @@
+#  Created byMartin.cz
+#  Copyright (c) Martin Strohalm. All rights reserved.
+
+import perrot
+from .constants import *
+
+# define app name
+APP_NAME = "PHD2 Guiding Log View"
+
+# define size
+PLOT_SPACING = 10
+PLOT_FRAME_X1 = 70
+PLOT_HEIGHT_EVENTS = 40
+PLOT_HEIGHT_STAR_MASS = 70
+PLOT_HEIGHT_STAR_SNR = 70
+PLOT_HEIGHT_MAIN = 0.6
+PLOT_HEIGHT_DRIFT = 0.4
+TEXT_HEIGHT = 30
+
+# define backgrounds
+MAIN_BGR = (42, 45, 48)
+PLOT_BGR = (25, 25, 25)
+TEXT_BGR = (25, 25, 25)
+
+# define buttons
+BUTTON_WIDTH = 30
+BUTTON_BGR = (60, 60, 60)
+BUTTON_TEXT = (150, 150, 150)
+
+# define axes
+AXES_LINE = (75, 75, 75)
+AXES_TEXT = (120, 120, 120)
+AXES_ZERO = (75, 75, 75)
+
+# define gridlines
+GRID_MAJOR = (39, 39, 39)
+GRID_MINOR = (36, 36, 36)
+
+# define legend
+LEGEND_BGR = (42, 45, 48)
+LEGEND_LINE = (75, 75, 75)
+LEGEND_TEXT = (120, 120, 120)
+
+# define tooltip
+TOOLTIP_BGR = (42, 45, 48)
+TOOLTIP_LINE = (75, 75, 75)
+TOOLTIP_TEXT = (120, 120, 120)
+TOOLTIP_SIZE = 12
+TOOLTIP_SPACING = 0.2
+
+# define series
+SERIES_RA = (100, 100, 225)
+SERIES_DEC = "r"
+SERIES_DX = (100, 100, 225)
+SERIES_DY = "r"
+SERIES_DRIFT_RA = (100, 100, 225)
+SERIES_DRIFT_DEC = "r"
+SERIES_CORR_RA = (100, 100, 225)
+SERIES_CORR_DEC = "r"
+SERIES_STAR_MASS = (225, 170, 50)
+SERIES_STAR_MASS_MED = "r"
+SERIES_STAR_SNR = (170, 170, 170)
+SERIES_STAR_SNR_MED = "r"
+SERIES_MIMO_X = (100, 100, 225)
+SERIES_MIMO_Y = "r"
+SERIES_REJECTED = "a"
+
+SERIES_Z_RA = perrot.SERIES_Z
+SERIES_Z_DEC = perrot.SERIES_Z+1
+SERIES_Z_CORR_DA = perrot.SERIES_Z-2
+SERIES_Z_CORR_DEC = perrot.SERIES_Z-1
+
+# define sys info
+SYSINFO_BGR = (42, 45, 48)
+SYSINFO_LINE = (85, 85, 85)
+SYSINFO_TEXT = (120, 120, 120)
+
+# define event colors
+SERIES_EVT_COLOR = {
+    INFO_CAT_ERROR: "r",
+    INFO_CAT_PARAM: (60, 140, 60),
+    INFO_CAT_LOCK: (100, 100, 200),
+    INFO_CAT_DITHER: (200, 140, 60),
+    INFO_CAT_SETTLING: "a",
+}
