@@ -1,7 +1,6 @@
 #  Created byMartin.cz
 #  Copyright (c) Martin Strohalm. All rights reserved.
 
-import time
 import datetime
 import pero
 import perrot
@@ -618,11 +617,6 @@ def add_guide_drift_data(plot, session, units=UNITS_ARCSEC, **overrides):
 def finalize_plot_style(plot):
     """Finalizes plot style."""
     
-    # x-label formatter
-    def x_label(seconds):
-        dt = datetime.datetime.fromtimestamp(seconds)
-        return dt.strftime('%H:%M:%S')
-    
     # x-tooltip formatter
     def x_tooltip(seconds):
         return f"{seconds:.3f} s"
@@ -639,7 +633,7 @@ def finalize_plot_style(plot):
         
         "x_axis_title_font_weight": pero.NORMAL,
         "x_axis_title_text_color": style.AXES_TEXT,
-        "x_axis_ticker_formatter": pero.FuncFormatter(func=x_label),
+        "x_axis_ticker_formatter": XFormatter(),
         "x_axis_tooltip": pero.FuncFormatter(func=x_tooltip),
         "x_axis_label_text_color": style.AXES_TEXT,
         "x_axis_line_color": style.AXES_LINE,
@@ -787,3 +781,19 @@ def format_guide_session_info(session):
     label += f"  -  {len(session.points):,d} entries"
     
     return label
+
+
+class XFormatter(pero.Formatter):
+    """Defines custom x-axis formatter."""
+    
+    
+    def format(self, value, *args, **kwargs):
+        """Formats given value."""
+        
+        dt = datetime.datetime.fromtimestamp(value)
+        if self.precision >= 1:
+            return dt.strftime('%H:%M:%S')
+        
+        digits = min(6, abs(int(numpy.floor(numpy.log10(abs(self.precision))))))
+        label = dt.strftime('%H:%M:%S.%f')
+        return label[:9+digits]
