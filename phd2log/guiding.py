@@ -117,8 +117,8 @@ class GuidePoint(object):
         self.mount = values[2].replace('"', "")
         self.dx = float(values[3]) if values[3] else None
         self.dy = float(values[4]) if values[4] else None
-        self.ra_raw_distance = float(values[5]) if values[5] else None
-        self.dec_raw_distance = float(values[6]) if values[6] else None
+        self.ra_raw_distance = float(values[5]) if values[5] else 0.0
+        self.dec_raw_distance = float(values[6]) if values[6] else 0.0
         self.ra_guide_distance = float(values[7]) if values[7] else None
         self.dec_guide_distance = float(values[8]) if values[8] else None
         self.ra_duration = int(values[9]) if values[9] else None
@@ -133,7 +133,8 @@ class GuidePoint(object):
         self.error_code = int(values[17])
         self.error_info = GUIDE_ERRORS.get(self.error_code, None)
         
-        self.rejected = False
+        self.rejected = not values[5] or not values[6]
+        
         self.ra_drift = 0
         self.dec_drift = 0
 

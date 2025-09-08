@@ -114,7 +114,7 @@ def parse_guiding(lines, line):
         if is_guiding:
             point = GuidePoint(line)
             session.add_point(point)
-            point.rejected = is_rejected
+            point.rejected = point.rejected or is_rejected
             continue
         
         # add settings

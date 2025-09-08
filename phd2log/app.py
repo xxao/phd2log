@@ -29,7 +29,8 @@ class PHD2Viewer(object):
             "show_ra": True,
             "show_dec": True,
             "show_corr": True,
-            "show_mimo": True}
+            "show_mimo": True,
+            "show_thr": True}
         
         self._prev_butt = None
         self._next_butt = None
@@ -141,6 +142,7 @@ class PHD2Viewer(object):
         elif evt.char == "a":
             self._settings["autoscale"] = not self._settings["autoscale"]
             self._radec_plot.graphics.y_axis.autoscale = self._settings["autoscale"]
+            self._drift_plot.graphics.y_axis.autoscale = self._settings["autoscale"]
         
         # toggle RA visibility
         elif evt.char == "r":
@@ -161,6 +163,11 @@ class PHD2Viewer(object):
         elif evt.char in ("m", "l"):
             self._settings["show_mimo"] = not self._settings["show_mimo"]
             self._update_mimo_visibility(True, True)
+        
+        # toggle threshold visibility
+        elif evt.char == "t":
+            self._settings["show_thr"] = not self._settings["show_thr"]
+            self._update_thr_visibility(True, True)
         
         # recalculate RMS
         elif evt.char == "e":
@@ -499,7 +506,7 @@ class PHD2Viewer(object):
         text += "D - toggles DEC data visibility\n"
         text += "C - toggles corrections visibility\n"
         text += "M - toggles minimum move visibility\n"
-        text += "A - toggles autoscale on RA/DEC plot\n"
+        text += "A - toggles autoscale on RA/DEC and drift plots\n"
         text += "E - evaluates RMS for visible range\n"
         text += "1 to 9 - jumps to specific session"
         
@@ -599,6 +606,7 @@ class PHD2Viewer(object):
         self._update_dec_visibility(False, False)
         self._update_corr_visibility(False, False)
         self._update_mimo_visibility(False, False)
+        self._update_thr_visibility(False, False)
         self._radec_plot.refresh()
         
         plotting.add_guide_drift_data(self._drift_plot.graphics, self._session, UNITS_ARCSEC)
@@ -667,6 +675,21 @@ class PHD2Viewer(object):
             ("annot_mimo_x_lo", "show_ra", "show_mimo"),
             ("annot_mimo_y_hi", "show_dec", "show_mimo"),
             ("annot_mimo_y_lo", "show_dec", "show_mimo"))
+        
+        # set plots to update
+        plots = (self._radec_plot,)
+        
+        # update plots
+        self._update_visibility(tags, plots, toggle, refresh)
+    
+    
+    def _update_thr_visibility(self, toggle, refresh):
+        """Updates visibility of minimum move data."""
+        
+        # set data to update
+        tags = (
+            ("annot_thr_hi", "show_thr"),
+            ("annot_thr_lo", "show_thr"))
         
         # set plots to update
         plots = (self._radec_plot,)

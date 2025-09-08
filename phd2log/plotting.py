@@ -520,6 +520,39 @@ def add_guide_mimo_data(plot, session, units=UNITS_ARCSEC):
             line_style = pero.DOTTED)
 
 
+def add_guide_thr_data(plot, session, pixel_size, focal_length, units=UNITS_ARCSEC):
+    """Adds main scope thresholds to plot."""
+    
+    # remove old data
+    for annot in plot.annotations:
+        if annot.tag.startswith("annot_thr_"):
+            plot.remove(annot)
+    
+    # init scale factor
+    f = 1 if units == UNITS_PX else session.pixel_scale
+    
+    # apply main scope ratio
+    pixel_scale = 206.265 * pixel_size / focal_length
+    f *= pixel_scale / session.pixel_scale
+    
+    # add x lines
+    if session.x_min_move:
+        
+        plot.hline(
+            tag = "annot_thr_hi",
+            y = 1 * f,
+            line_color = style.SERIES_THR,
+            line_alpha = 170,
+            line_style = pero.DASHED)
+        
+        plot.hline(
+            tag = "annot_thr_lo",
+            y = -1 * f,
+            line_color = style.SERIES_THR,
+            line_alpha = 170,
+            line_style = pero.DASHED)
+
+
 def add_guide_rejection_data(plot, session):
     """Adds rejected regions to plot."""
     
@@ -531,34 +564,32 @@ def add_guide_rejection_data(plot, session):
     # check session
     if session is None:
         return
-        
-    # init width adjuster
-    shift = 0.5 * (session.exposure or 1)
     
     # init buff
-    start = None
-    end = None
     count = 0
+    running = False
+    last = session.points[0]
+    start = last.stamp
     
     # mark rejected regions
     for point in session.points:
         
+        # set running
+        if point.rejected:
+            if not running:
+                start = 0.5 * (point.stamp + last.stamp)
+                running = True
+        
         # mark region
-        if not point.rejected:
-            if start is not None:
-                tag = f"annot_reject_{count}"
-                plot.vband(start, end, tag=tag, fill_color=style.SERIES_REJECTED, fill_alpha=60)
-                start = None
-                end = None
-                count += 1
-            continue
+        elif running:
+            tag = f"annot_reject_{count}"
+            end = 0.5 * (point.stamp + last.stamp)
+            plot.vband(start, end, tag=tag, fill_color=style.SERIES_REJECTED, fill_alpha=60)
+            running = False
+            count += 1
         
-        # set new start
-        if start is None:
-            start = point.stamp - shift
-        
-        # move end
-        end = point.stamp + shift
+        # remember last
+        last = point
 
 
 def add_guide_drift_data(plot, session, units=UNITS_ARCSEC, **overrides):
