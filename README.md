@@ -1,16 +1,19 @@
 # phd2log
 
+The *phd2log* library provides a simple parser and viewer for [PHD2](https://openphdguiding.org) guiding logs.
+Just drag and drop your PHD2 log file onto the viewer window and play with your data.
+
 ![Screenshot](https://github.com/xxao/phd2log/blob/main/screenshot.png?raw=true)
 
 
 ## Requirements to run from the source
 
-- [Python 3.11+](https://www.python.org)
-- [numpy] (https://pypi.org/project/numpy/)
-- [pero] (https://pypi.org/project/pero/)
-- [perrot] (https://pypi.org/project/perrot/)
-- [pyqt6] (https://pypi.org/project/pyqt6/)
-- [pillow] (https://pypi.org/project/pillow/)
+- [Python](https://www.python.org)
+- [numpy](https://pypi.org/project/numpy/)
+- [pero](https://pypi.org/project/pero/)
+- [perrot](https://pypi.org/project/perrot/)
+- [pyqt6](https://pypi.org/project/pyqt6/)
+- [pillow](https://pypi.org/project/pillow/)
 
 
 ## License
