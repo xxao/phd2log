@@ -791,7 +791,7 @@ class XFormatter(pero.Formatter):
         """Formats given value."""
         
         dt = datetime.datetime.fromtimestamp(value)
-        if self.precision >= 1:
+        if self.precision > 1:
             return dt.strftime('%H:%M:%S')
         
         digits = min(6, abs(int(numpy.floor(numpy.log10(abs(self.precision))))))
