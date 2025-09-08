@@ -1,9 +1,7 @@
 #  Created byMartin.cz
-# This code was inspired by original work of Andy Galasso.
-# https://github.com/agalasso/phdlogview
+#  Copyright (c) Martin Strohalm. All rights reserved.
 
 import numpy
-from .stats import Stats
 
 
 def calc_guiding_drifts(points):
@@ -14,67 +12,82 @@ def calc_guiding_drifts(points):
         point.ra_drift = None
         point.dec_drift = None
     
-    # get valid points
-    points = [p for p in points if not p.rejected]
-    if not points:
-        return
-    
-    # init stats
-    ra_stats = Stats()
-    dec_stats = Stats()
-    
     # init buffs
-    ra_drift = 0
+    degree = 2
+    ra_points = []
+    dec_points = []
+    last_ra_drift = 0
     last_ra_raw = 0
     last_ra_guide = 0
     
     # process points
     for point in points:
         
+        # skip rejected
+        if point.rejected:
+            continue
+        
         # calc RA drift
         if point.ra_raw_distance is not None and point.ra_guide_distance is not None:
-            drift = point.ra_raw_distance - last_ra_raw - last_ra_guide
-            ra_drift += drift
+            point.ra_drift = point.ra_raw_distance + (last_ra_drift - last_ra_raw - last_ra_guide)
+            last_ra_drift = point.ra_drift
             last_ra_raw = point.ra_raw_distance
             last_ra_guide = point.ra_guide_distance
-            ra_stats.add(point.seconds, ra_drift)
-            point.ra_drift = ra_drift
+            ra_points.append(point)
         
         # calc DEC drift
         if point.dec_raw_distance is not None:
-            dec_stats.add(point.seconds, point.dec_raw_distance)
             point.dec_drift = point.dec_raw_distance
+            dec_points.append(point)
     
-    # apply offset
-    ra_a = ra_stats.a()
-    ra_b = ra_stats.b()
-    dec_a = dec_stats.a()
-    dec_b = dec_stats.b()
+    # fit RA data to polynomial for better view
+    if ra_points:
+        x = numpy.array([p.seconds for p in ra_points])
+        y = numpy.array([p.ra_drift for p in ra_points])
+        fit = numpy.polynomial.polynomial.Polynomial.fit(x, y, degree)
+        for point in ra_points:
+            point.ra_drift -= fit(point.seconds)
     
-    for point in points:
-        if point.ra_drift is not None:
-            point.ra_drift -= ra_a * point.seconds + ra_b
-        if point.dec_drift is not None:
-            point.dec_drift -= dec_a * point.seconds + dec_b
+    # fit DEC to polynomial for better view
+    if dec_points:
+        x = numpy.array([p.seconds for p in dec_points])
+        y = numpy.array([p.dec_drift for p in dec_points])
+        fit = numpy.polynomial.polynomial.Polynomial.fit(x, y, degree)
+        for point in dec_points:
+            point.dec_drift -= fit(point.seconds)
 
 
 def calc_guiding_rms(points):
-    """Calculates total RMS from given guiding points."""
+    """Calculates RMS from given guiding points."""
     
-    # get valid points
-    points = [p for p in points if not p.rejected]
-    if not points:
-        return 0, 0, 0
-        
-    # add points to stats
-    stats = Stats()
+    # init buffs
+    rms_ra = 0
+    rms_dec = 0
+    ra_points = []
+    dec_points = []
+    
+    # get points
     for point in points:
-        if point.ra_raw_distance is not None and point.dec_raw_distance is not None:
-            stats.add(point.ra_raw_distance, point.dec_raw_distance)
+        if point.rejected:
+            continue
+        if point.ra_raw_distance is not None:
+            ra_points.append(point)
+        if point.dec_raw_distance is not None:
+            dec_points.append(point)
     
-    # get RMS
-    rms_ra = numpy.sqrt(stats.var_x)
-    rms_dec = numpy.sqrt(stats.var_y)
+    # calc RA rms
+    if ra_points:
+        y = numpy.array([p.ra_raw_distance for p in ra_points])
+        var_y = numpy.var(y, ddof=0)
+        rms_ra = numpy.sqrt(var_y)
+    
+    # calc DEC rms
+    if dec_points:
+        y = numpy.array([p.dec_raw_distance for p in dec_points])
+        var_y = numpy.var(y, ddof=0)
+        rms_dec = numpy.sqrt(var_y)
+    
+    # calc total rms
     rms_tot = numpy.sqrt(rms_ra*rms_ra + rms_dec*rms_dec)
     
     return float(rms_ra), float(rms_dec), float(rms_tot)
