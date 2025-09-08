@@ -1,6 +1,6 @@
 # phd2log
 
-![Screenshot](https://raw.githubusercontent.com/xxao/phd2log/master/screenshot.png)
+![Screenshot](https://github.com/xxao/phd2log/blob/main/screenshot.png?raw=true)
 
 
 ## Requirements to run from the source
