@@ -1,0 +1,5 @@
+numpy >= 2.3
+pero >= 0.29
+perrot >= 0.25
+pyqt6 >= 6.9
+pillow >= 11.3
