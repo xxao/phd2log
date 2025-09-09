@@ -5,7 +5,7 @@ import perrot
 from .constants import *
 
 # define app name
-APP_NAME = "PHD2 Guiding Log View"
+APP_NAME = "phd2log"
 
 # define size
 PLOT_SPACING = 10

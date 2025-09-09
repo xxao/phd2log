@@ -6,7 +6,7 @@ Just drag and drop your PHD2 log file onto the viewer window and play with your 
 ![Screenshot](https://github.com/xxao/phd2log/blob/main/screenshot.png?raw=true)
 
 
-## Requirements to run from the source
+## Requirements
 
 - [Python](https://www.python.org)
 - [numpy](https://pypi.org/project/numpy/)
