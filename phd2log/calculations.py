@@ -39,8 +39,8 @@ def calc_guiding_drifts(points):
     x = numpy.array([p.seconds for p in points])
     ra = numpy.array([p.ra_drift for p in points])
     dec = numpy.array([p.dec_drift for p in points])
-    ra_fit = numpy.polynomial.polynomial.Polynomial.fit(x, ra, degree)
-    dec_fit = numpy.polynomial.polynomial.Polynomial.fit(x, dec, degree)
+    ra_fit = numpy.polynomial.Polynomial.fit(x, ra, degree)
+    dec_fit = numpy.polynomial.Polynomial.fit(x, dec, degree)
     
     # apply shift
     for point in points:

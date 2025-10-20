@@ -16,6 +16,21 @@ Just drag and drop your PHD2 log file onto the viewer window and play with your 
 - [pillow](https://pypi.org/project/pillow/)
 
 
+## Start Viewer
+
+```python
+from phd2log.app import PHD2Viewer
+
+app = PHD2Viewer()
+app.show()
+```
+ or
+
+```
+python viewer.py
+```
+then drag and drop your PHD2 log file onto the viewer window.
+
 ## License
 
 MIT License
