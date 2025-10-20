@@ -18,13 +18,16 @@ Just drag and drop your PHD2 log file onto the viewer window and play with your 
 
 ## Start Viewer
 
+From custom python script:
+
 ```python
 from phd2log.app import PHD2Viewer
 
 app = PHD2Viewer()
 app.show()
 ```
- or
+
+or from terminal:
 
 ```
 python viewer.py
