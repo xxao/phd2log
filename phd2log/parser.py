@@ -149,7 +149,7 @@ def extract_float_param(line, key):
     """Extracts parameter value from given line."""
     
     # init expression
-    expr = f"{key} = ([0-9]+(?:\.[0-9]+)?)\s?(%?[a-z]*)?"
+    expr = f"{key} = ([0-9]+(?:\\.[0-9]+)?)\\s?(%?[a-z]*)?"
     
     # search text
     match = re.search(expr, line)
