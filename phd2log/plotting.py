@@ -827,4 +827,4 @@ class XFormatter(pero.Formatter):
         
         digits = min(6, abs(int(numpy.floor(numpy.log10(abs(self.precision))))))
         label = dt.strftime('%H:%M:%S.%f')
-        return label[:9+digits]
+        return label[:9+digits] if digits else label[:8]
